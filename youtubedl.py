@@ -1,11 +1,22 @@
 import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox as messagebox
+from tkinter import filedialog
 from pytube import YouTube
 import os
+import webbrowser
 
-VIDEO_SAVE_DIRECTORY = os.path.expanduser("~/Downloads")
-AUDIO_SAVE_DIRECTORY = os.path.expanduser("~/Downloads")
+SAVE_DIRECTORY = os.path.expanduser("~\Downloads")
+selected_directory = ""
+
+def open_link(event):
+    webbrowser.open("https://vorlie.pl")
+
+def select_directory():
+    global selected_directory
+    directory = filedialog.askdirectory(initialdir=selected_directory)
+    selected_directory = directory
+    return directory
 
 def apply_icon(w):
     try:
@@ -19,7 +30,11 @@ def download_video(video_url):
     video = video.streams.get_highest_resolution()
 
     try:
-        file_path = video.download(VIDEO_SAVE_DIRECTORY)
+        directory = selected_directory or SAVE_DIRECTORY
+        if directory:
+            file_path = video.download(directory)
+        else:
+            return None
     except:
         print("Failed to download video")
         return None
@@ -32,10 +47,14 @@ def download_audio(video_url):
     audio = video.streams.filter(only_audio=True).first()
 
     try:
-        file_path = audio.download(AUDIO_SAVE_DIRECTORY)
-        # Change the file extension to mp3
-        new_file_path = file_path[:-4] + ".mp3"
-        os.rename(file_path, new_file_path)
+        directory = selected_directory or SAVE_DIRECTORY
+        if directory:
+            file_path = audio.download(directory)
+            # Change the file extension to mp3
+            new_file_path = file_path[:-4] + ".mp3"
+            os.rename(file_path, new_file_path)
+        else:
+            return None
     except:
         print("Failed to download audio")
         return None
@@ -47,27 +66,36 @@ def main():
     root = tk.Tk()
     apply_icon(root)
     root.configure(background='#222222')
-    root.geometry('300x150')
+    root.geometry('330x250')
     root.title("Youtube Downloader")
     root.resizable(False, False)  # Disable window resizing
 
     style = ttk.Style()
-    style.configure("TRadiobutton", background='#222222', foreground='#FFFFFF', indicatorbackground='#924273')
+    style.configure("TRadiobutton", background='#222222', foreground='#FFFFFF', indicatorbackground='#616161')
 
-    link_label = tk.Label(root, text="YouTube Link:", fg='#FFFFFF', bg='#222222', anchor='w')
-    link_label.pack(fill='x')
+    link_label = tk.Label(root, text="Paste your youtube link here:", fg='#FFFFFF', bg='#222222', anchor='w')
+    link_label.pack(fill='none')
 
-    link_entry = tk.Entry(root, width=40)
-    link_entry.pack(fill='x')
+    link_entry = tk.Entry(root, width=50)
+    link_entry.pack(fill='none')
 
     audio_var = tk.BooleanVar()
     audio_var.set(False)
 
-    video_radio = ttk.Radiobutton(root, text="Video", variable=audio_var, value=False)
-    video_radio.pack(fill='x')
+    video_radio = ttk.Radiobutton(root, text="Video (.mp4)", variable=audio_var, value=False)
+    video_radio.pack(fill='none')
 
-    audio_radio = ttk.Radiobutton(root, text="Audio", variable=audio_var, value=True)
-    audio_radio.pack(fill='x')
+    audio_radio = ttk.Radiobutton(root, text="Audio (.mp3)", variable=audio_var, value=True)
+    audio_radio.pack(fill='none')
+
+    folder_label = tk.Label(root, text=f"Default directory: {SAVE_DIRECTORY}", fg='#c8c8c8', bg='#222222', anchor='w')
+    folder_label.pack(fill='none')
+
+    blank_label = tk.Label(root, text=" ", fg='#FFFFFF', bg='#222222', anchor='w')
+    blank_label.pack(fill='none')
+
+    folder_button = tk.Button(root, text="Select Folder", command=select_directory, fg='#FFFFFF', bg='#333333', highlightbackground='#ff8181', width=15, cursor="hand2")
+    folder_button.pack(fill='none')
     
     def download():
         video_url = link_entry.get()
@@ -85,8 +113,15 @@ def main():
         if file_path:
             messagebox.showinfo("Download Complete", f"File saved at: {os.path.abspath(file_path)}")
 
-    download_button = tk.Button(root, text="Download", command=download, fg='#FFFFFF', bg='#924273', highlightcolor='#924273')
-    download_button.pack(fill='x')
+    download_button = tk.Button(root, text="Download", command=download, fg='#FFFFFF', bg='#333333', highlightcolor='#616161', width=15, cursor="hand2")
+    download_button.pack(fill='none')
+    
+    blank_label = tk.Label(root, text=" ", fg='#FFFFFF', bg='#222222', anchor='w')
+    blank_label.pack(fill='none')
+
+    footer_label = tk.Label(root, text="Made by vorlie", fg='#616161', bg='#222222', anchor='w', cursor="hand2")
+    footer_label.pack(fill='none')
+    footer_label.bind("<Button-1>", open_link)
 
     root.mainloop()
 
