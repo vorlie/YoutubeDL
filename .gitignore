@@ -1,5 +1,8 @@
 build/
 dist/
 *.spec
-downloadicon.ico
 youtubedownloader.py
+modern_youtubedl.py
+test.py
+colors.txt
+test/
