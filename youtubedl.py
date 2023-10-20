@@ -53,8 +53,9 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.geometry("310x250")
-        self.title("YoutubeDL v2.0.0")
+        self.title("YoutubeDL v2.0.1")
         self.iconbitmap("./icon.ico")
+        self.resizable(False,False)
         
         ctk.set_appearance_mode("System")
         ctk.set_default_color_theme("./theme.json")
