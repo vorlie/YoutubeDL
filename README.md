@@ -13,9 +13,9 @@ Simple youtube downloader. Currently supports windows only.
 - Selected folder:
 ![Selected Folder](https://i.vorlie.pl/r/youtubedl_c797594.png)
 - Dropdown menu:
-![Dropdown menu](https://i.vorlie.pl/youtubedl_d778b7c.png)
+![Dropdown menu](https://i.vorlie.pl/r/youtubedl_d778b7c.png)
 - Downloaded:
-![Downloaded](https://i.vorlie.pl/Code_ea46b01.png)
+![Downloaded](https://i.vorlie.pl/r/Code_ea46b01.png)
 
 ## Libraries used to make this possible
 - [PyTube](https://pypi.org/project/pytube/)
