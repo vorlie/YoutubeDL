@@ -1,26 +1,31 @@
 # Youtube Downloader by Vorlie 
 Simple youtube downloader. Currently supports windows only.
 
-## Possible
+## Features
 - Paste youtube link
 - Select video or audio (mp4/mp3)
 - Select folder (Default is C:/Users/~/Downloads)
+- Dynamic theme. (Dark/Light depends on the system theme)
 - And of course download it
 
-## Gallery
-- Default folder:
+# Gallery
+All pictures of the program
+## Dark mode:
 ![Default folder](https://i.vorlie.pl/r/youtubedl_de0b04f.png)
-- Selected folder:
 ![Selected Folder](https://i.vorlie.pl/r/youtubedl_c797594.png)
-- Dropdown menu:
 ![Dropdown menu](https://i.vorlie.pl/r/youtubedl_d778b7c.png)
-- Downloaded:
 ![Downloaded](https://i.vorlie.pl/r/Code_ea46b01.png)
 
-## Libraries used to make this possible
+## Light mode:
+![Default folder](https://i.vorlie.pl/r/youtubedl_770d88c.png)
+![Selected folder](https://i.vorlie.pl/r/youtubedl_5c802f7.png)
+![Dropdown menu](https://i.vorlie.pl/r/youtubedl_5dcfb90.png)
+![Downloaded](https://i.vorlie.pl/r/Code_9b290cd.png)
+
+# Libraries used to make this possible
 - [PyTube](https://pypi.org/project/pytube/)
 - [Tkinter](https://docs.python.org/3/library/tkinter.html)
 - [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter)
 
-# Build it yourself
+## Build it yourself
 Use [Pyinstaller](https://pypi.org/project/pyinstaller/)
