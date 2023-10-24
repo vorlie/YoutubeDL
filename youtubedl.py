@@ -93,7 +93,7 @@ class App(ctk.CTk):
                 messagebox.showerror("Error", "Please provide a YouTube link")
                 return
 
-            if is_audio:
+            if is_audio == "Audio (.mp3)":
                 file_path = download_audio(video_url)
             else:
                 file_path = download_video(video_url)

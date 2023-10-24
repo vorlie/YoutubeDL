@@ -1,10 +1,12 @@
 # Youtube Downloader by Vorlie 
-Simple youtube downloader. Currently supports windows only.
+Simple youtube downloader. 
+Currently supports Windows and MacOS.
+MacOS 11.7.10 and newer.
 
 ## Features
 - Paste youtube link
 - Select video or audio (mp4/mp3)
-- Select folder (Default is C:/Users/~/Downloads)
+- Select folder (Default is **Windows:** `C:/Users/~/Downloads` or **MacOS:** `/Users/~/Downloads`)
 - Dynamic theme. (Dark/Light depends on the system theme)
 - And of course download it
 
