@@ -1,5 +1,6 @@
 # Youtube Downloader by Vorlie 
-Simple youtube downloader. Currently supports windows only.
+Simple youtube downloader. 
+Currently supports windows only. Works on linux and macos if run youtubedl.py directly, use the release version if you are on windows.
 
 ## Features
 - Paste youtube link
