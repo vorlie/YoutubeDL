@@ -8,21 +8,16 @@ MacOS 11.7.10 and newer.
 - Select video or audio (mp4/mp3)
 - Select folder (Default is **Windows:** `C:/Users/~/Downloads` or **MacOS:** `/Users/~/Downloads`)
 - Dynamic theme. (Dark/Light depends on the system theme)
+- Video info viewer
 - And of course download it
 
 # Gallery
 All pictures of the program
 ## Dark mode:
-![Default folder](https://i.vorlie.pl/r/youtubedl_de0b04f.png)
-![Selected Folder](https://i.vorlie.pl/r/youtubedl_c797594.png)
-![Dropdown menu](https://i.vorlie.pl/r/youtubedl_d778b7c.png)
-![Downloaded](https://i.vorlie.pl/r/Code_ea46b01.png)
-
-## Light mode:
-![Default folder](https://i.vorlie.pl/r/youtubedl_770d88c.png)
-![Selected folder](https://i.vorlie.pl/r/youtubedl_5c802f7.png)
-![Dropdown menu](https://i.vorlie.pl/r/youtubedl_5dcfb90.png)
-![Downloaded](https://i.vorlie.pl/r/Code_9b290cd.png)
+![1](https://cx.tixte.co/r/youtubedl-13.png)
+![2](https://cx.tixte.co/r/youtubedl-14.png)
+![3](https://cx.tixte.co/r/youtubedl-312321.png)
+![4](https://cx.tixte.co/r/youtubedl-213213.png)
 
 # Libraries used to make this possible
 - [PyTube](https://pypi.org/project/pytube/)
