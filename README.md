@@ -10,15 +10,7 @@
   - **MacOS:** `/Users/~/Downloads`
 - Video info viewer
 - And of course download it
-
-# Gallery
-All pictures of the program
-## Dark mode:
-![1](https://cx.tixte.co/r/youtubedl-13.png)
-![2](https://cx.tixte.co/r/youtubedl-14.png)
-![3](https://cx.tixte.co/r/youtubedl-312321.png)
-![4](https://cx.tixte.co/r/youtubedl-213213.png)
-
+- 
 # Libraries used to make this possible
 - [PyTube](https://pypi.org/project/pytube/)
 - [Tkinter](https://docs.python.org/3/library/tkinter.html)
