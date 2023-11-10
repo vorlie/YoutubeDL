@@ -14,6 +14,7 @@ selected_directory = ""
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
+
 def download_video(video_url):
     video = YouTube(video_url)
     video = video.streams.get_highest_resolution()
