@@ -10,7 +10,7 @@
   - **MacOS:** `/Users/~/Downloads`
 - Video info viewer
 - And of course download it
-- 
+  
 # Libraries used to make this possible
 - [PyTube](https://pypi.org/project/pytube/)
 - [Tkinter](https://docs.python.org/3/library/tkinter.html)
