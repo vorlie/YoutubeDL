@@ -1,10 +1,12 @@
 # Requirements
-- MacOS 11.7.10 and newer.
+- MacOS 11.7.10 and newer. Or Windows 10+
 - scdl
 - ffmpeg
-> If scdl is not installed, install it using (pip3 install scdl).
+> If scdl is not installed, install it using (pip3 install scdl) / (pip install scdl).
 
-> If ffmpeg is not installed, visit [this page](https://evermeet.cx/ffmpeg/) and download the latest package and extract it to /usr/local/bin/
+> If ffmpeg is not installed, visit this page [macos](https://evermeet.cx/ffmpeg/)/[windows](https://ffmpeg.org/download.html#build-windows)
+>
+> For macos you might extract the package to /usr/local/bin/
 
 # Important!
 Refer to the scdl instructions [https://github.com/flyingrub/scdl/wiki/Installation-Instruction](https://github.com/flyingrub/scdl/wiki/Installation-Instruction)
@@ -15,7 +17,8 @@ Config [source](https://github.com/flyingrub/scdl/blob/master/scdl/scdl.cfg):
 [scdl]
 client_id = 
 auth_token =
-path = .
+# Specify the path for scdl
+path = . 
 name_format = {title}
 playlist_name_format = {playlist[title]}_{title}
 ```
