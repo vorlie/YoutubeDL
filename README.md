@@ -6,9 +6,8 @@
 - Paste youtube link
 - Select video or audio (mp4/mp3)
 - Select folder - Default:
- - **Windows:** `C:/Users/~/Downloads`
- - **MacOS:** `/Users/~/Downloads`
-
+  - **Windows:** `C:/Users/~/Downloads`
+  - **MacOS:** `/Users/~/Downloads`
 - Video info viewer
 - And of course download it
 
