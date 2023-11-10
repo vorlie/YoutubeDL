@@ -8,3 +8,4 @@ colors.txt
 test/
 .DS_Store
 test3.py
+gui.py
