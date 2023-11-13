@@ -1,5 +1,5 @@
 # IMPORTANT!!
-If your antivirus is gonna complain about the .exe, you can ignore it! It's false positive I tried everything I could to make it not complain!
+If your antivirus is gonna complain about the .exe, you can ignore it! It's false positive I tried everything I could to make it not complain! [VirusTotal result](https://www.virustotal.com/gui/file/33c355e4989ab3164d1bfca6c576fa95e9f8f6c0e80d5e7a606138df9c49f20e/detection)
 
 # Requirements
 - Windows 10+
