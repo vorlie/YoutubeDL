@@ -1,3 +1,6 @@
+# IMPORTANT!!
+If your antivirus is gonna complain about the .exe, you can ignore it! It's false positive I tried everything I could to make it not complain!
+
 # Requirements
 - Windows 10+
 - Python 3.12 (Optional)
