@@ -5,7 +5,7 @@
 
 > scdl is required only when you want to download songs from soundcloud, if you don't want then you don't need to install it!
 
-# Dependencies:
+# Dependencies
 - yt-dlp
 - ffmpeg/ffprobe
 - scdl (optional)
