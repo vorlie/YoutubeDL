@@ -12,7 +12,7 @@
 
 ## Build it yourself
 Use [Pyinstaller](https://pypi.org/project/pyinstaller/)
-Check the .spec file and specify the paths for the required datas. 
+Check the [.spec file](https://github.com/vorlie/YoutubeDL/blob/main/spec-file-example-for-windows.spec) and specify the paths for the required datas. 
 Once you do, run `pyinstaller name-of-the-spec-file.spec`
 
 These will append the required files to the .exe
