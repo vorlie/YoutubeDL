@@ -1,32 +1,29 @@
 # Requirements
-- MacOS 11.7.10 and newer.
-- Or Windows 10+
+- Windows 10+
+- Python 3.12 (Optional)
+ - scdl `pip install scdl` (Optional)
 
-## Features
-- Paste youtube link
-- Select video or audio (mp4/mp3)
-- Select folder - Default:
- - **Windows:** `C:/Users/~/Downloads`
- - **MacOS:** `/Users/~/Downloads`
+> scdl is required only when you want to download songs from soundcloud, if you don't want then you don't need to install it!
 
-- Video info viewer
-- And of course download it
-
-# Gallery
-All pictures of the program
-## Dark mode:
-![1](https://cx.tixte.co/r/youtubedl-13.png)
-![2](https://cx.tixte.co/r/youtubedl-14.png)
-![3](https://cx.tixte.co/r/youtubedl-312321.png)
-![4](https://cx.tixte.co/r/youtubedl-213213.png)
-
-# Libraries used to make this possible
-- [PyTube](https://pypi.org/project/pytube/)
-- [Tkinter](https://docs.python.org/3/library/tkinter.html)
+# Dependencies:
+- yt-dlp
+- ffmpeg/ffprobe
+- scdl (optional)
 
 ## Build it yourself
 Use [Pyinstaller](https://pypi.org/project/pyinstaller/)
+Check the .spec file and specify the paths for the required datas. 
+
+Once you do, run `pyinstaller name-of-the-spec-file.spec`
+
+These will append the required files to the .exe
+```
+datas=[
+    ('PATH-TO-THIS-FOLDER\\assets', 'assets'),
+    ('PATH-TO-THIS-ICON\\icon.ico', '.'),
+    ('PATH-TO-THIS-FOLDER\\dependencies', '.')
+]
+```
 
 ## Gallery
-
-[![1](https://cx.tixte.co/r/Zrzut_ekranu_2023-11-10_o_15.03.21.png)](https://cx.tixte.co/r/Zrzut_ekranu_2023-11-10_o_15.03.21.png)
+![https://cx.tixte.co/preview-ytdl.png](https://cx.tixte.co/preview-ytdl.png)
