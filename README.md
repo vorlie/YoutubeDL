@@ -25,4 +25,4 @@ datas=[
 ```
 
 ## Gallery
-![https://cx.tixte.co/preview-ytdl.png](https://cx.tixte.co/preview-ytdl.png)
+![https://cx.tixte.co/r/preview-ytdl.png](https://cx.tixte.co/r/preview-ytdl.png)
