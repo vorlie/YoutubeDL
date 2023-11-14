@@ -164,10 +164,8 @@ def download_audio_get():
     if not video_url:
         messagebox.showinfo("Warning","No youtube URL provided")
         return
-    file_path = download_audio(video_url)
+    download_audio(video_url)
 
-    if file_path:
-        messagebox.showinfo("Download Complete", f"Audio saved at: {os.path.abspath(file_path)}")
 
 button_image_2 = PhotoImage(
     file=relative_to_assets("button_2.png"))
@@ -197,10 +195,7 @@ def download_video_get():
     if not video_url:
         messagebox.showinfo("Warning","No youtube URL provided")
         return
-    file_path = download_video(video_url)
-
-    if file_path:
-        messagebox.showinfo("Download Complete", f"Video saved at: {os.path.abspath(file_path)}")
+    download_video(video_url)
 
 button_image_3 = PhotoImage(
     file=relative_to_assets("button_3.png"))
