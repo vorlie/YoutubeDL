@@ -12,7 +12,6 @@ ASSETS_PATH = Path(sys._MEIPASS) / "assets"
 #ASSETS_PATH = "assets"
 
 dependencies_path = Path(sys._MEIPASS)
-
 #dependencies_path = "dependencies" 
 
 def relative_to_assets(path: str) -> Path:
@@ -20,13 +19,13 @@ def relative_to_assets(path: str) -> Path:
 
 def download_video(video_url):
     try:
-        subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-k', video_url])
+        subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', './downloaded/videos', video_url])
     except Exception as e:
         print("Failed to download video:", e)
 
 def download_audio(video_url):
     try:
-        subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-k', '--ffmpeg-location', dependencies_path, '--extract-audio', '--audio-format', 'mp3', video_url])
+        subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', './downloaded/audio', '--ffmpeg-location', dependencies_path, '--extract-audio', '--audio-format', 'mp3', video_url])
     except Exception as e:
         print("Failed to download audio:", e)
 
