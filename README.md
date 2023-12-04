@@ -5,15 +5,10 @@ If you are sceptical, read the code..
 
 # Requirements
 - Windows 10+
-- Python 3.12 (Optional)
- - scdl `pip install scdl` (Optional)
-
-> scdl is required only when you want to download songs from soundcloud, if you don't want then you don't need to install it!
 
 # Dependencies
 - yt-dlp
 - ffmpeg/ffprobe
-- scdl (optional)
 
 ## Build it yourself
 Use [Pyinstaller](https://pypi.org/project/pyinstaller/)

@@ -7,6 +7,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import subprocess
 import ffmpeg
+import yt_dlp
 
 ASSETS_PATH = Path(sys._MEIPASS) / "assets" 
 #ASSETS_PATH = "assets"
@@ -40,7 +41,7 @@ window.configure(bg = "#000000")
 canvas = Canvas(
     window,
     bg = "#000000",
-    height = 800,
+    height = 505,
     width = 850,
     bd = 0,
     highlightthickness = 0,
@@ -74,7 +75,10 @@ image_2 = canvas.create_image(
 )
 
 def download_soundcloud_track(track_url):
-    subprocess.run([f'{dependencies_path}/scdl.exe', '-l', track_url])
+    try:
+        subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', './downloaded/audio', track_url])
+    except Exception as e:
+        print("Failed to download soundcloud track:", e)
 
 
 image_image_4 = PhotoImage(
@@ -233,16 +237,16 @@ canvas.create_text(
     61.0,
     221.0,
     anchor="nw",
-    text="Video Information:",
+    text="Information:",
     fill="#FFFFFF",
     font=("Montserrat Bold", 24 * -1)
 )
 
 video_info = canvas.create_text(
     61.0,
-    265.0,
+    257.0,
     anchor="nw",
-    text="Uploader:\nDuration:\nViews:",
+    text="!",
     fill="#FFFFFF",
     font=("Montserrat", 20 * -1)
 )
@@ -251,7 +255,7 @@ title_text = canvas.create_text(
     61.0,
     425.0,
     anchor="nw",
-    text=f"Title: ",
+    text=f"!",
     fill="#FFFFFF",
     font=("Montserrat", 20 * -1)
 )
@@ -261,23 +265,43 @@ def fetch_video_info():
     if not video_url:
         messagebox.showinfo("Warning","No youtube URL provided")
         return
+    ydl_opts = {}
+    if video_url.startswith("https://soundcloud.com"):
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info_dict = ydl.extract_info(video_url, download=False)
+                title = info_dict.get('title')
+                uploader = info_dict.get('uploader')
+                repost_count = info_dict.get('repost_count')
+                like_count = info_dict.get('like_count')
+                genre = info_dict.get('genre')
 
-    yt = YouTube(video_url)
-    try:
-        title = yt.title
-        uploader = yt.author
-        views = yt.views
-        publish_date = yt.publish_date
-        length_seconds = yt.length
-        length_minutes = length_seconds // 60
-        length_seconds = length_seconds % 60
-        length_formatted = f"{length_minutes}:{length_seconds:02d}"
-    except Exception as e:
-        print(f"Error fetching video info: {e}")
-        return
+                duration_seconds = info_dict.get('duration')
+                duration_minutes, duration_seconds = divmod(duration_seconds, 60)
+                duration = f"{int(duration_minutes)}:{int(duration_seconds):02d}"
+                canvas.itemconfigure(video_info, text=f"Author: {uploader}\nDuration: {duration}\nReposts: {repost_count}\nLikes: {like_count}\nGenre: {genre}")
+                canvas.itemconfigure(title_text, text=f"Title: {title}")
+        except Exception as e:
+            print(f"Error fetching video info: {e}")
+            return
+    else:
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(video_url, download=False) # Extract the video information
+                title = info.get('title', None) # Get the video title
+                likes = info.get('like_count', None) # Get the number of likes
+                views = info.get('view_count', None) # Get the number of views
+                uploader = info.get('uploader', None) # Get the uploader
+                duration = info.get('duration', None) # Get the duration
+                length_minutes = duration // 60 # Get the duration in minutes
+                length_seconds = duration % 60 # Get the duration in seconds
+                length_formatted = f"{length_minutes}:{length_seconds:02d}" # Format the duration
 
-    canvas.itemconfigure(video_info, text=f"Uploader: {uploader}\nDuration: {length_formatted}\nViews: {views}\nPublished: {publish_date}")
-    canvas.itemconfigure(title_text, text=f"Title: {title}")
+                canvas.itemconfigure(video_info, text=f"Uploader: {uploader}\nDuration: {length_formatted}\nViews: {views}\nLikes: {likes}")
+                canvas.itemconfigure(title_text, text=f"Title: {title}")
+        except Exception as e:
+            print(f"Error fetching video info: {e}")
+            return
 
 button_image_5 = PhotoImage(
     file=relative_to_assets("button_5.png"))
