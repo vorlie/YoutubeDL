@@ -5,6 +5,7 @@ import tkinter.messagebox as messagebox
 from tkinter import filedialog
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+import threading
 import subprocess
 import ffmpeg
 import yt_dlp
@@ -18,17 +19,15 @@ dependencies_path = Path(sys._MEIPASS)
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-def download_video(video_url):
-    try:
-        subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', './downloaded/videos', video_url])
-    except Exception as e:
-        print("Failed to download video:", e)
+save_directory = os.path.expanduser("~\\Downloads\\")
+selected_directory = ""
 
-def download_audio(video_url):
-    try:
-        subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', './downloaded/audio', '--ffmpeg-location', dependencies_path, '--extract-audio', '--audio-format', 'mp3', video_url])
-    except Exception as e:
-        print("Failed to download audio:", e)
+
+def select_directory():
+    global selected_directory
+    directory = filedialog.askdirectory(initialdir=selected_directory)
+    selected_directory = directory.replace("/", "\\")
+    messagebox.showinfo("Directory Selected", "Directory selected: " + selected_directory)
 
 window = Tk()
 window.iconbitmap(str(Path(sys._MEIPASS) / "icon.ico"))
@@ -37,6 +36,31 @@ window.title("YoutubeDL")
 window.geometry("850x505")
 window.configure(bg = "#000000")
 
+def download_video(video_url):
+    directory = selected_directory or save_directory
+    if directory:
+        try:
+            subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', directory, video_url])
+            messagebox.showinfo("Download Complete", "Video download finished! Saved to " + directory)
+        except Exception as e:
+            print("Failed to download video:", e)
+        finally:
+            window.config(cursor="")
+    else:
+        return None
+
+def download_audio(video_url):
+    directory = selected_directory or save_directory
+    if directory:
+        try:
+            subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', directory, '--ffmpeg-location', dependencies_path, '--extract-audio', '--audio-format', 'mp3', video_url])
+            messagebox.showinfo("Download Complete", "Audio download finished! Saved to " + directory)
+        except Exception as e:
+            print("Failed to download audio:", e)
+        finally:
+            window.config(cursor="")
+    else:
+        return None
 
 canvas = Canvas(
     window,
@@ -73,13 +97,6 @@ image_2 = canvas.create_image(
     306.0,
     image=image_image_2
 )
-
-def download_soundcloud_track(track_url):
-    try:
-        subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', './downloaded/audio', track_url])
-    except Exception as e:
-        print("Failed to download soundcloud track:", e)
-
 
 image_image_4 = PhotoImage(
     file=relative_to_assets("image_4.png"))
@@ -133,21 +150,15 @@ image_8 = canvas.create_image(
     image=image_image_8
 )
 
-def download_soundcloud_track_get():
-    track_url = entry_1.get()
-    if not track_url:
-        messagebox.showinfo("Warning","No soundcloud URL provided")
-        return
-    download_soundcloud_track(track_url)
-
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
 button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=download_soundcloud_track_get,
-    relief="flat"
+    command=select_directory,
+    relief="flat",
+    cursor="hand2"
 )
 button_1.place(
     x=585.0,
@@ -163,13 +174,15 @@ image_10 = canvas.create_image(
     372.0,
     image=image_image_10
 )
-def download_audio_get():
+
+def start_audio_download():
     video_url = entry_1.get()
     if not video_url:
         messagebox.showinfo("Warning","No youtube URL provided")
         return
-    download_audio(video_url)
-
+    window.config(cursor="wait")
+    download_thread = threading.Thread(target=download_audio, args=(video_url,))
+    download_thread.start()
 
 button_image_2 = PhotoImage(
     file=relative_to_assets("button_2.png"))
@@ -177,8 +190,9 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=download_audio_get,
-    relief="flat"
+    command=start_audio_download,
+    relief="flat",
+    cursor="hand2"
 )
 button_2.place(
     x=586.0,
@@ -194,12 +208,14 @@ image_11 = canvas.create_image(
     305.0,
     image=image_image_11
 )
-def download_video_get():
+def start_video_download():
     video_url = entry_1.get()
     if not video_url:
         messagebox.showinfo("Warning","No youtube URL provided")
         return
-    download_video(video_url)
+    window.config(cursor="wait")
+    download_thread = threading.Thread(target=download_video, args=(video_url,))
+    download_thread.start()
 
 button_image_3 = PhotoImage(
     file=relative_to_assets("button_3.png"))
@@ -207,8 +223,9 @@ button_3 = Button(
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-    command=download_video_get,
-    relief="flat"
+    command=start_video_download,
+    relief="flat",
+    cursor="hand2"
 )    
 button_3.place(
     x=586.0,
@@ -280,10 +297,21 @@ def fetch_video_info():
                 duration_minutes, duration_seconds = divmod(duration_seconds, 60)
                 duration = f"{int(duration_minutes)}:{int(duration_seconds):02d}"
                 canvas.itemconfigure(video_info, text=f"Author: {uploader}\nDuration: {duration}\nReposts: {repost_count}\nLikes: {like_count}\nGenre: {genre}")
-                canvas.itemconfigure(title_text, text=f"Title: {title}")
+                max_chars = 64
+
+                def truncate_title(title):
+                    if len(title) > max_chars:
+                        truncated_title = title[:max_chars-3] + "..."
+                    else:
+                        truncated_title = title
+                    return truncated_title
+
+                canvas.itemconfigure(title_text, text=f"Title: {truncate_title(title)}")
         except Exception as e:
             print(f"Error fetching video info: {e}")
             return
+        finally:
+            window.config(cursor="")
     else:
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -298,10 +326,25 @@ def fetch_video_info():
                 length_formatted = f"{length_minutes}:{length_seconds:02d}" # Format the duration
 
                 canvas.itemconfigure(video_info, text=f"Uploader: {uploader}\nDuration: {length_formatted}\nViews: {views}\nLikes: {likes}")
-                canvas.itemconfigure(title_text, text=f"Title: {title}")
+                max_chars = 64
+
+                def truncate_title(title):
+                    if len(title) > max_chars:
+                        truncated_title = title[:max_chars-3] + "..."
+                    else:
+                        truncated_title = title
+                    return truncated_title
+
+                canvas.itemconfigure(title_text, text=f"Title: {truncate_title(title)}")
         except Exception as e:
             print(f"Error fetching video info: {e}")
             return
+        finally:
+            window.config(cursor="")
+def start_fetching_info():
+    window.config(cursor="wait")
+    info_thread = threading.Thread(target=fetch_video_info)
+    info_thread.start()
 
 button_image_5 = PhotoImage(
     file=relative_to_assets("button_5.png"))
@@ -309,8 +352,9 @@ button_5 = Button(
     image=button_image_5,
     borderwidth=0,
     highlightthickness=0,
-    command=fetch_video_info,
-    relief="flat"
+    command=start_fetching_info,
+    relief="flat",
+    cursor="hand2"
 )
 button_5.place(
     x=586.0,
