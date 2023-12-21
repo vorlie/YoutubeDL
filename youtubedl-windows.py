@@ -4,11 +4,13 @@ import sys
 import tkinter.messagebox as messagebox
 from tkinter import filedialog
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, Label
 import threading
 import subprocess
 import ffmpeg
 import yt_dlp
+import requests
+import webbrowser
 
 ASSETS_PATH = Path(sys._MEIPASS) / "assets" 
 #ASSETS_PATH = "assets"
@@ -22,12 +24,44 @@ def relative_to_assets(path: str) -> Path:
 save_directory = os.path.expanduser("~\\Downloads\\")
 selected_directory = ""
 
+current_version = "v2.1.0" 
+github_repository = "vorlie/YoutubeDL"  
+
+def check_for_updates():
+    try:
+        api_url = f"https://api.github.com/repos/{github_repository}/releases/latest"
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            latest_version = response.json()["tag_name"]
+            if latest_version != current_version:
+                release_url = response.json()["html_url"]
+                download_url = response.json()["assets"][0]["browser_download_url"]
+                up = Toplevel()
+                up.title("Update Available")
+                up.geometry("300x150")
+                up.configure(bg = "#000000")
+                up.resizable(False, False)
+                up.iconbitmap("icon.ico")
+                Label(up, text=f"Current version: {current_version}\nUpdate available: {latest_version}", bg = "#000000", fg = "#FFFFFF", anchor="w").pack()
+                Button(up, text="Check out the update", command=lambda: webbrowser.open(release_url), bg = "#000000", fg = "#FFFFFF", anchor="w").pack()
+                Button(up, text="Download new version", command=lambda: webbrowser.open(download_url), bg = "#000000", fg = "#FFFFFF", anchor="w").pack()
+                Button(up, text="Close", command=up.destroy, bg="#000000", fg="#FFFFFF", anchor="w").pack()
+            else:
+                pass
+        else:
+            messagebox.showerror("Error", "Failed to check for updates.")
+    except requests.RequestException:
+        messagebox.showerror("Error", "Failed to check for updates.")
 
 def select_directory():
     global selected_directory
     directory = filedialog.askdirectory(initialdir=selected_directory)
     selected_directory = directory.replace("/", "\\")
     messagebox.showinfo("Directory Selected", "Directory selected: " + selected_directory)
+
+def on_startup():
+    update_check = threading.Thread(target=check_for_updates,)
+    update_check.start()
 
 window = Tk()
 window.iconbitmap(str(Path(sys._MEIPASS) / "icon.ico"))
@@ -281,6 +315,7 @@ def fetch_video_info():
     video_url = entry_1.get()
     if not video_url:
         messagebox.showinfo("Warning","No youtube URL provided")
+        window.config(cursor="")
         return
     ydl_opts = {}
     if video_url.startswith("https://soundcloud.com"):
@@ -388,5 +423,6 @@ image_15 = canvas.create_image(
     image=image_image_15
 )
 
+on_startup()
 window.resizable(False, False)
 window.mainloop()
