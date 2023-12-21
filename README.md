@@ -25,4 +25,4 @@ datas=[
 ```
 
 ## Gallery
-![https://cx.tixte.co/r/preview-ytdl.png](https://cx.tixte.co/r/preview-ytdl.png)
+![https://i.vorlie.pl/r/YoutubeDL_297067489.png](hhttps://i.vorlie.pl/r/YoutubeDL_297067489.png)
