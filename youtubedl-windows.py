@@ -1,38 +1,28 @@
-from pytube import YouTube
-import os
-import sys
 import tkinter.messagebox as messagebox
+from os import path as ospath
 from tkinter import filedialog
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, Label
-import threading
-import subprocess
-import ffmpeg
-import yt_dlp
-import requests
-import webbrowser
+from threading import Thread
+from subprocess import run
+from yt_dlp import YoutubeDL
+from requests import get, RequestException
+from webbrowser import open
 
 ASSETS_PATH = "./assets"
 dependencies_path = "./binaries" 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
-save_directory = os.path.expanduser("~\\Downloads\\")
+save_directory = ospath.expanduser("~\\Downloads\\")
 selected_directory = ""
-current_version = "v2.1.1" 
+current_version = "v2.1.2" 
 github_repository = "vorlie/YoutubeDL"  
-supported_sites = [
-    "https://youtube.com/",
-    "https://youtu.be/",
-    "https://soundcloud.com/",
-    "https://music.youtube.com/",
-    "https://www.youtube.com/",
-    "https://www.soundcloud.com/"
-]
+supported_sites = ["https://youtube.com/","https://youtu.be/","https://soundcloud.com/","https://music.youtube.com/","https://www.youtube.com/","https://www.soundcloud.com/"]
 
 def check_for_updates():
     try:
         api_url = f"https://api.github.com/repos/{github_repository}/releases/latest"
-        response = requests.get(api_url)
+        response = get(api_url)
         if response.status_code == 200:
             latest_version = response.json()["tag_name"]
             if latest_version > current_version:
@@ -45,14 +35,14 @@ def check_for_updates():
                 up.resizable(False, False)
                 up.iconbitmap("icon.ico")
                 Label(up, text=f"Current version: {current_version}\nUpdate available: {latest_version}", bg = "#000000", fg = "#FFFFFF", anchor="w").pack()
-                Button(up, text="Check out the update", command=lambda: webbrowser.open(release_url), bg = "#000000", fg = "#FFFFFF", anchor="w").pack()
-                Button(up, text="Download new version", command=lambda: webbrowser.open(download_url), bg = "#000000", fg = "#FFFFFF", anchor="w").pack()
+                Button(up, text="Check out the update", command=lambda: open(release_url), bg = "#000000", fg = "#FFFFFF", anchor="w").pack()
+                Button(up, text="Download new version", command=lambda: open(download_url), bg = "#000000", fg = "#FFFFFF", anchor="w").pack()
                 Button(up, text="Close", command=up.destroy, bg="#000000", fg="#FFFFFF", anchor="w").pack()
             else:
                 pass
         else:
             messagebox.showerror("Error", "Failed to check for updates.")
-    except requests.RequestException:
+    except RequestException:
         messagebox.showerror("Error", "Failed to check for updates.")
 
 def select_directory():
@@ -62,7 +52,7 @@ def select_directory():
     messagebox.showinfo("Directory Selected", "Directory selected: " + selected_directory)
 
 def on_startup():
-    update_check = threading.Thread(target=check_for_updates,)
+    update_check = Thread(target=check_for_updates,)
     update_check.start()
 def fetch_video_info():
     video_url = entry_1.get()
@@ -73,7 +63,7 @@ def fetch_video_info():
     ydl_opts = {}
     if video_url.startswith("https://soundcloud.com"):
         try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            with YoutubeDL(ydl_opts) as ydl:
                 info_dict = ydl.extract_info(video_url, download=False)
                 title = info_dict.get('title')
                 uploader = info_dict.get('uploader')
@@ -99,7 +89,7 @@ def fetch_video_info():
             window.config(cursor="")
     elif video_url.startswith("https://www.youtube.com") or video_url.startswith("https://youtu.be") or video_url.startswith("https://music.youtube.com") or video_url.startswith("https://youtube.com"):
         try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            with YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(video_url, download=False)
                 title = info.get('title', None) 
                 likes = info.get('like_count', None) 
@@ -132,7 +122,7 @@ def download_video(video_url):
     directory = selected_directory or save_directory
     if directory:
         try:
-            subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', directory, video_url])
+            run([f'{dependencies_path}/yt-dlp.exe', '-P', directory, video_url])
             messagebox.showinfo("Download Complete", "Video download finished! Saved to " + directory)
         except Exception as e:
             print("Failed to download video:", e)
@@ -145,7 +135,7 @@ def download_audio(video_url):
     directory = selected_directory or save_directory
     if directory:
         try:
-            subprocess.run([f'{dependencies_path}/yt-dlp.exe', '-P', directory, '--ffmpeg-location', dependencies_path, '--extract-audio', '--audio-format', 'mp3', video_url])
+            run([f'{dependencies_path}/yt-dlp.exe', '-P', directory, '--ffmpeg-location', dependencies_path, '--extract-audio', '--audio-format', 'mp3', video_url])
             messagebox.showinfo("Download Complete", "Audio download finished! Saved to " + directory)
         except Exception as e:
             print("Failed to download audio:", e)
@@ -193,7 +183,7 @@ def start_audio_download():
         messagebox.showinfo("Warning", "Invalid URL. Only youtube/soundcloud URLs are supported.")
         return
     window.config(cursor="wait")
-    download_thread = threading.Thread(target=download_audio, args=(video_url,))
+    download_thread = Thread(target=download_audio, args=(video_url,))
     download_thread.start()
 
 button_image_2 = PhotoImage(file=relative_to_assets("button_2.png"))
@@ -211,7 +201,7 @@ def start_video_download():
         messagebox.showinfo("Warning", "Invalid URL. Only youtube/soundcloud URLs are supported.")
         return
     window.config(cursor="wait")
-    download_thread = threading.Thread(target=download_video, args=(video_url,))
+    download_thread = Thread(target=download_video, args=(video_url,))
     download_thread.start()
 
 button_image_3 = PhotoImage(file=relative_to_assets("button_3.png"))
@@ -227,7 +217,7 @@ title_text = canvas.create_text(61.0,425.0,anchor="nw",text=f"!",fill="#FFFFFF",
 
 def start_fetching_info():
     window.config(cursor="wait")
-    info_thread = threading.Thread(target=fetch_video_info)
+    info_thread = Thread(target=fetch_video_info)
     info_thread.start()
 
 button_image_5 = PhotoImage(file=relative_to_assets("button_5.png"))
