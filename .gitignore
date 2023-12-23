@@ -3,10 +3,6 @@ dist/
 youtubedl-w.spec
 youtubedl.spec
 youtubedownloader.py
-modern_youtubedl.py
-test.py
-colors.txt
-test/
 .DS_Store
-test3.py
-gui.py
+license.txt
+setup.iss

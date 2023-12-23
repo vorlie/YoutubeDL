@@ -5,11 +5,7 @@ a = Analysis(
     ['youtubedl-windows.py'],
     pathex=[],
     binaries=[],
-    datas=[
-        ('PATH-TO-THIS-FOLDER\\assets', 'assets'),
-        ('PATH-TO-THIS-ICON\\icon.ico', '.'),
-        ('PATH-TO-THIS-FOLDER\\dependencies', '.')
-	],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
