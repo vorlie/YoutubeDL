@@ -9,7 +9,7 @@ If you are skeptical, read the code..
 
 ## Build it yourself
 Use [Pyinstaller](https://pypi.org/project/pyinstaller/)
-Check the [.spec file](https://github.com/vorlie/YoutubeDL/blob/main/spec-file-example-for-windows.spec) and specify the paths for the required datas. 
+Check the [.spec file](https://github.com/vorlie/YoutubeDL/blob/main/spec-file-example-for-windows.spec). 
 Once you do, run `pyinstaller name-of-the-spec-file.spec` 
 > Make sure you have the `./binaries`, `./assets` and `./icon.ico` in the same path as the .exe or .py file. Otherwise it will not open.
 
