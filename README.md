@@ -1,7 +1,12 @@
 # IMPORTANT!!
 If your antivirus is gonna complain about the .exe, you can ignore it! It's false positive I tried everything I could to make it not complain! 
-It's not signed because I am not spending hundreds of money on this.
+
+It's not signed because I am not spending hundreds of money on this. 
+
+And since it was compiled using Pyinstaller, I can't do anything about it.
+
 If you are skeptical, read the code..
+
 - 3/69 [VirusTotal result](https://www.virustotal.com/gui/file/eeef3947f76085d1c60719c66c7bfa084711f7e9159c613231ae6722c673054b/detection)
 
 # Requirements
