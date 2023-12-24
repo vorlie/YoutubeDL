@@ -14,4 +14,4 @@ Once you do, run `pyinstaller name-of-the-spec-file.spec`
 > Make sure you have the `./binaries`, `./assets` and `./icon.ico` in the same path as the .exe or .py file. Otherwise it will not open.
 
 ## Gallery
-![https://i.vorlie.pl/r/YoutubeDL_297067489.png](hhttps://i.vorlie.pl/r/YoutubeDL_297067489.png)
+![https://i.vorlie.pl/r/YoutubeDL_297067489.png](https://i.vorlie.pl/r/YoutubeDL_297067489.png)
