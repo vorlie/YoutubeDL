@@ -10,7 +10,7 @@ If you are skeptical, read the code..
 - 3/69 [VirusTotal result](https://www.virustotal.com/gui/file/eeef3947f76085d1c60719c66c7bfa084711f7e9159c613231ae6722c673054b/detection)
 
 # Requirements
-- Windows 10+
+- Windows 10+ or Ubuntu 22.04 based OS
 
 ## Build it yourself
 Use [Pyinstaller](https://pypi.org/project/pyinstaller/)
