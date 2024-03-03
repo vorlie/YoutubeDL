@@ -13,9 +13,9 @@ ASSETS_PATH = "./assets"
 dependencies_path = "./binaries" 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
-save_directory = ospath.expanduser("~\\Downloads\\")
+save_directory = ospath.expanduser("~/Downloads/")
 selected_directory = ""
-current_version = "v2.1.3" 
+current_version = "v2.1.2" 
 github_repository = "vorlie/YoutubeDL"  
 supported_sites = ["https://youtube.com/","https://youtu.be/","https://soundcloud.com/","https://music.youtube.com/","https://www.youtube.com/","https://www.soundcloud.com/"]
 
@@ -118,27 +118,51 @@ def fetch_video_info():
         window.config(cursor="")
         return
 
-def download_video(video_url):
+
+
+def download_video(video_url, download_type="video"):
     directory = selected_directory or save_directory
     if directory:
         try:
-            run([f'{dependencies_path}/yt-dlp.exe', '-P', directory, video_url])
+            ydl_opts = {
+                'format': 'bestvideo+bestaudio/best' if download_type == "video" else 'bestaudio/best',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }] if download_type == "audio" else [],
+                'outtmpl': ospath.join(directory, '%(title)s.%(ext)s'),
+            }  
+            with YoutubeDL(ydl_opts) as ydl:
+                ydl.download([video_url])
             messagebox.showinfo("Download Complete", "Video download finished! Saved to " + directory)
         except Exception as e:
             print("Failed to download video:", e)
+            messagebox.showinfo("Error", "Failed to download video: " + str(e))
         finally:
             window.config(cursor="")
     else:
         return None
 
-def download_audio(video_url):
+def download_audio(video_url, download_type="audio"):
     directory = selected_directory or save_directory
     if directory:
         try:
-            run([f'{dependencies_path}/yt-dlp.exe', '-P', directory, '--ffmpeg-location', dependencies_path, '--extract-audio', '--audio-format', 'mp3', video_url])
+            ydl_opts = {
+                'format': 'bestvideo+bestaudio/best' if download_type == "video" else 'bestaudio/best',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }] if download_type == "audio" else [],
+                'outtmpl': ospath.join(directory, '%(title)s.%(ext)s'),
+            }  
+            with YoutubeDL(ydl_opts) as ydl:
+                ydl.download([video_url])
             messagebox.showinfo("Download Complete", "Audio download finished! Saved to " + directory)
         except Exception as e:
             print("Failed to download audio:", e)
+            messagebox.showinfo("Error", "Failed to download audio: " + str(e))
         finally:
             window.config(cursor="")
     else:

@@ -6,3 +6,5 @@ youtubedownloader.py
 .DS_Store
 license.txt
 setup.iss
+dist.zip
+YoutubeDL-Setup.exe
