@@ -11,7 +11,7 @@ The project directory contains:
    - `utils.py`: Source code for utility functions.
 - `resources/`: Directory containing images and other resources.
    - `loading.gif`: Loading animation GIF file.
-   - `.gitignore`: Git ignore rules.
+- `.gitignore`: Git ignore rules.
 - `main.py`: Source code for the GUI application.
 - `config.json`: Configuration file for the application. 
    - The application will create it if it doesn't exist.
