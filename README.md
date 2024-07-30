@@ -37,10 +37,18 @@ The compiled executable for Windows is not included in the repository. Instead, 
 - **Custom Configuration:** Set paths for `yt-dlp` and `ffmpeg` binaries, and manage supported sites.
 - **Loading Indicators:** Visual feedback with a loading animation during long operations.
 
-### Running the application
 
-1. **Download the executable** from the GitHub Releases page.
-2. **Run YoutubeDL** by double-clicking the `YoutubeDL.exe` file.
+### Installation
+
+1. **Download the archive**:
+    - [YouTubeDL-win64.zip](https://github.com/vorlie/YoutubeDL/releases/download/v3.0/YouTubeDL-win64.zip)
+
+2. **Extract the archive**:
+    - Extract the downloaded `YouTubeDL-win64.zip`.
+    
+3. **Run the Application**: 
+    - Open the archive that you just extracted.
+    - Double-click the extracted `.exe` file to start the application.
 
 ## Development
 
