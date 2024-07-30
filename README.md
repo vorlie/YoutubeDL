@@ -1,8 +1,8 @@
-# YouTubeDL GUI
+# YouTubeDL
 
 ## Overview
 
-YouTubeDL GUI is a graphical user interface for managing YouTube video and audio downloads using `yt-dlp`. It provides a simple and user-friendly way to fetch video information and download media files.
+YouTubeDL is a graphical user interface for managing YouTube video and audio downloads using `yt-dlp`. It provides a simple and user-friendly way to fetch video information and download media files.
 
 ## Project Structure
 
@@ -37,10 +37,10 @@ The compiled executable for Windows is not included in the repository. Instead, 
 - **Custom Configuration:** Set paths for `yt-dlp` and `ffmpeg` binaries, and manage supported sites.
 - **Loading Indicators:** Visual feedback with a loading animation during long operations.
 
-### Running the GUI Application
+### Running the application
 
 1. **Download the executable** from the GitHub Releases page.
-2. **Run the GUI Application** by double-clicking the `YoutubeDLGUI.exe` file.
+2. **Run YoutubeDL** by double-clicking the `YoutubeDL.exe` file.
 
 ## Development
 
