@@ -1,10 +1,6 @@
-build/
-dist/
-youtubedl-w.spec
-youtubedl.spec
-youtubedownloader.py
 .DS_Store
-license.txt
-setup.iss
-dist.zip
-YoutubeDL-Setup.exe
+app/
+dist/
+build/
+__pycache__/
+config.json
