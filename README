@@ -1,0 +1,94 @@
+# YouTubeDL GUI
+
+## Overview
+
+YouTubeDL GUI is a graphical user interface for managing YouTube video and audio downloads using `yt-dlp`. It provides a simple and user-friendly way to fetch video information and download media files.
+
+## Project Structure
+
+The project directory contains:
+- `module/`: Directory containing utility functions.
+   - `utils.py`: Source code for utility functions.
+- `resources/`: Directory containing images and other resources.
+   - `loading.gif`: Loading animation GIF file.
+   - `.gitignore`: Git ignore rules.
+- `main.py`: Source code for the GUI application.
+- `LICENSE`: License information.
+- `README`: This file.
+- `requirements.txt`: List of Python dependencies.
+- `YoutubeDL.spec`: PyInstaller spec file for the GUI application.
+
+## Downloading the Executable
+
+The compiled executable for Windows is not included in the repository. Instead, you can download it from the GitHub Releases page:
+
+- **[Download YoutubeDL](https://github.com/vorlie/YoutubeDL/releases/download/v3.0/YoutubeDL-win64.zip)**
+
+## YoutubeDL.exe (GUI)
+
+### Features
+
+- **Fetch Video Information:** Retrieve and display video details such as title, uploader, duration, and thumbnail.
+- **Download Video and Audio:** Download videos or audio from supported YouTube URLs.
+   - It should be always targetting the highest quality.
+- **Custom Configuration:** Set paths for `yt-dlp` and `ffmpeg` binaries, and manage supported sites.
+- **Loading Indicators:** Visual feedback with a loading animation during long operations.
+
+### Running the GUI Application
+
+1. **Download the executable** from the GitHub Releases page.
+2. **Run the GUI Application** by double-clicking the `YoutubeDLGUI.exe` file.
+
+## Development
+
+To contribute to the development or modify the application:
+
+1. **Clone the Repository**:
+
+    ```bash
+    git clone https://github.com/vorlie/YoutubeDL.git
+    ```
+
+2. **Navigate to the Project Directory**:
+
+    ```bash
+    cd <path-to-project-directory>
+    ```
+
+3. **Install Dependencies**:
+
+    Ensure you have Python and pip installed. Then install the required Python packages:
+
+    ```bash
+    pip install -r requirements.txt --ignore-requires-python
+    ```
+
+4. **Run the Application**:
+
+    ```bash
+    python main.py
+    ```
+
+5. **Build the Executable**:
+
+    Use PyInstaller to bundle the application into a standalone executable.
+
+    If you do not have PyInstaller installed:
+
+    ```bash
+    pip install pyinstaller==6.6.0
+    ```
+
+    Build the executable:
+
+    ```bash
+    pyinstaller YoutubeDL.spec
+    ```
+
+6. **Test the Executable**:
+
+    The built executable will be located in the `dist/` directory. Test it to ensure it works as expected.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
