@@ -13,6 +13,9 @@ The project directory contains:
    - `loading.gif`: Loading animation GIF file.
    - `.gitignore`: Git ignore rules.
 - `main.py`: Source code for the GUI application.
+- `config.json`: Configuration file for the application. 
+   - The application will create it if it doesn't exist.
+- `icon.ico`: Icon for the application.
 - `LICENSE`: License information.
 - `README`: This file.
 - `requirements.txt`: List of Python dependencies.
@@ -88,6 +91,18 @@ To contribute to the development or modify the application:
 6. **Test the Executable**:
 
     The built executable will be located in the `dist/` directory. Test it to ensure it works as expected.
+
+## Thanks
+
+A special thanks to the following projects and contributors that made this tool possible:
+
+- **[yt-dlp](https://github.com/yt-dlp/yt-dlp)**: A powerful YouTube video downloader that is used for fetching video and audio content.
+- **[FFmpeg](https://ffmpeg.org/download.html)**: A comprehensive multimedia framework used for handling audio, video, and other multimedia files and streams.
+- **[PyQt5](https://www.riverbankcomputing.com/software/pyqt/intro)**: A set of Python bindings for the Qt application framework, which provides the GUI capabilities for this application.
+- **[qdarktheme](https://pypi.org/project/pyqtdarktheme/)**: A library for applying dark themes to PyQt5 applications, enhancing the visual appeal of the interface.
+
+Your work and contributions are greatly appreciated!
+
 
 ## License
 
