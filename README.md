@@ -17,7 +17,7 @@ The project directory contains:
    - The application will create it if it doesn't exist.
 - `icon.ico`: Icon for the application.
 - `LICENSE`: License information.
-- `README`: This file.
+- `README.md`: This file.
 - `requirements.txt`: List of Python dependencies.
 - `YoutubeDL.spec`: PyInstaller spec file for the GUI application.
 
