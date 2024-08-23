@@ -40,7 +40,7 @@ DEFAULT_CONFIG = {
     ]
 }
 
-CONFIG_FILE_PATH = "config.json" 
+CONFIG_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 class LicenseDialog(QDialog):
     def __init__(self, parent=None):
@@ -128,18 +128,24 @@ class ConfigDialog(QDialog):
 
     def save_config(self):
         config = self.get_config()
+        
+        # Normalize paths based on the operating system
+        config["yt_dlp_path"] = os.path.normpath(config["yt_dlp_path"])
+        config["ffmpeg_path"] = os.path.normpath(config["ffmpeg_path"])
+        config["save_directory"] = os.path.normpath(config["save_directory"])
 
-        if os.name == 'nt':  # Windows
-            config["yt_dlp_path"] = config["yt_dlp_path"].replace('/', '\\')
-            config["ffmpeg_path"] = config["ffmpeg_path"].replace('/', '\\')
-            config["save_directory"] = config["save_directory"].replace('/', '\\')
-        else:  # Unix-like (Linux, macOS)
-            config["yt_dlp_path"] = config["yt_dlp_path"].replace('\\', '/')
-            config["ffmpeg_path"] = config["ffmpeg_path"].replace('\\', '/')
-            config["save_directory"] = config["save_directory"].replace('\\', '/')
-
-        with open(CONFIG_FILE_PATH, "w") as file:
-            json.dump(config, file, indent=4)
+        # Ensure the directory for the config file exists
+        config_dir = os.path.dirname(CONFIG_FILE_PATH)
+        if not os.path.exists(config_dir):
+            os.makedirs(config_dir, exist_ok=True)
+        
+        # Save the config to the file
+        try:
+            with open(CONFIG_FILE_PATH, "w", encoding="utf8") as file:
+                json.dump(config, file, indent=4)
+        except IOError as e:
+            print(f"Error saving config: {e}")
+            
 
 class DownloadWorker(QThread):
     download_complete = pyqtSignal(str)
