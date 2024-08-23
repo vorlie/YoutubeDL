@@ -40,7 +40,19 @@ DEFAULT_CONFIG = {
     ]
 }
 
-CONFIG_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
+# Determine if the script is running as a compiled executable or as a script
+if getattr(sys, 'frozen', False):
+    # If the application is frozen (compiled with PyInstaller), this will be True
+    base_path = sys._MEIPASS  # Use this for accessing bundled files, if any
+    exe_dir = os.path.dirname(sys.executable)
+    print(f"Running as a compiled executable: {exe_dir}")
+else:
+    # If running as a script, use the directory of the script
+    exe_dir = os.path.dirname(os.path.abspath(__file__))
+    print(f"Running as a script: {exe_dir}")
+
+# Set CONFIG_FILE_PATH to the directory of the executable or script
+CONFIG_FILE_PATH = os.path.join(exe_dir, "config.json")
 
 class LicenseDialog(QDialog):
     def __init__(self, parent=None):
