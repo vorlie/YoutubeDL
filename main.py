@@ -176,6 +176,10 @@ class DownloadWorker(QThread):
             # Determine filename
             filename = self.manual_filename if self.manual_filename else self.filename_template
             outtmpl = os.path.join(self.directory, filename)
+            
+            if self.ffmpeg_path == "ffmpeg" and not self.is_ffmpeg_in_path():
+                raise Exception("FFmpeg not found in PATH. Please add it to PATH or set a custom path in the configuration.")
+            
             # Prepare the options for yt-dlp
             ydl_opts = {
                 'outtmpl': outtmpl,
