@@ -28,8 +28,7 @@ class VideoInfoFetcher(QThread):
             info['error'] = str(e)
         self.info_fetched.emit(info)
 
-DEFAULT_CONFIG = {
-    "yt_dlp_path": "yt-dlp", 
+DEFAULT_CONFIG = { 
     "ffmpeg_path": "ffmpeg", 
     "save_directory":  os.path.join(os.path.expanduser("~"), "Downloads"),
     "supported_sites": [
@@ -101,12 +100,10 @@ class ConfigDialog(QDialog):
     def initUI(self):
         layout = QFormLayout()
 
-        self.yt_dlp_path_input = QLineEdit(self)
         self.ffmpeg_path_input = QLineEdit(self)
         self.save_directory_input = QLineEdit(self)
         self.supported_sites_input = QPlainTextEdit(self)
 
-        layout.addRow("yt-dlp Path:", self.yt_dlp_path_input)
         layout.addRow("FFmpeg Path:", self.ffmpeg_path_input)
         layout.addRow("Save Directory:", self.save_directory_input)
         layout.addRow("Supported Sites (one per line):", self.supported_sites_input)
@@ -163,31 +160,36 @@ class DownloadWorker(QThread):
     download_complete = pyqtSignal(str)
     download_error = pyqtSignal(str)
 
-    def __init__(self, video_url, download_type, yt_dlp_path, ffmpeg_path, directory):
+    def __init__(self, video_url, download_type, ffmpeg_path, directory):
         super().__init__()
         self.video_url = video_url
         self.download_type = download_type
-        self.yt_dlp_path = yt_dlp_path
         self.ffmpeg_path = ffmpeg_path
         self.directory = directory
 
     def run(self):
         try:
-            # Check if ffmpeg is in PATH if it's set as "ffmpeg" in config
-            if self.ffmpeg_path == "ffmpeg" and not self.is_ffmpeg_in_path():
-                raise Exception("FFmpeg not found in PATH. Please add it to PATH or set a custom path in the configuration.")
+            # Prepare the options for yt-dlp
+            ydl_opts = {
+                'outtmpl': os.path.join(self.directory, '%(title)s [%(id)s].%(ext)s'),
+                'format': 'bestaudio/best' if self.download_type == 'audio' else 'bestvideo+bestaudio/best',
+                'noplaylist': True,
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }] if self.download_type == 'audio' else [],
+                'ffmpeg_location': self.ffmpeg_path if self.ffmpeg_path != 'ffmpeg' else None,
+            }
 
-            if self.download_type == "video":
-                run([self.yt_dlp_path, '-P', self.directory, self.video_url])
-            elif self.download_type == "audio":
-                if self.ffmpeg_path == "ffmpeg":
-                    run([self.yt_dlp_path, '-P', self.directory, '--extract-audio', '--audio-format', 'mp3', self.video_url])
-                else:
-                    run([self.yt_dlp_path, '-P', self.directory, '--ffmpeg-location', self.ffmpeg_path, '--extract-audio', '--audio-format', 'mp3', self.video_url])
-            self.download_complete.emit("Download finished! Saved to " + self.directory)
+            # Initialize YoutubeDL with options
+            with YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(self.video_url, download=True)
+
+            self.download_complete.emit(f"Download finished! Saved to {self.directory}")
         except Exception as e:
             self.download_error.emit(str(e))
-
+    
     def is_ffmpeg_in_path(self):
         """Check if ffmpeg is available in the system's PATH by running 'ffmpeg -version'."""
         try:
