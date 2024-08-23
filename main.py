@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import QThread, pyqtSignal, Qt
 from PyQt5.QtGui import QPixmap, QIcon, QMovie
-from subprocess import run
+from subprocess import run, DEVNULL
 from yt_dlp import YoutubeDL
 from module.utils import get_save_directory
 import qdarktheme as qdt
@@ -173,13 +173,28 @@ class DownloadWorker(QThread):
 
     def run(self):
         try:
+            # Check if ffmpeg is in PATH if it's set as "ffmpeg" in config
+            if self.ffmpeg_path == "ffmpeg" and not self.is_ffmpeg_in_path():
+                raise Exception("FFmpeg not found in PATH. Please add it to PATH or set a custom path in the configuration.")
+
             if self.download_type == "video":
                 run([self.yt_dlp_path, '-P', self.directory, self.video_url])
             elif self.download_type == "audio":
-                run([self.yt_dlp_path, '-P', self.directory, '--ffmpeg-location', self.ffmpeg_path, '--extract-audio', '--audio-format', 'mp3', self.video_url])
+                if self.ffmpeg_path == "ffmpeg":
+                    run([self.yt_dlp_path, '-P', self.directory, '--extract-audio', '--audio-format', 'mp3', self.video_url])
+                else:
+                    run([self.yt_dlp_path, '-P', self.directory, '--ffmpeg-location', self.ffmpeg_path, '--extract-audio', '--audio-format', 'mp3', self.video_url])
             self.download_complete.emit("Download finished! Saved to " + self.directory)
         except Exception as e:
             self.download_error.emit(str(e))
+
+    def is_ffmpeg_in_path(self):
+        """Check if ffmpeg is available in the system's PATH by running 'ffmpeg -version'."""
+        try:
+            result = run(['ffmpeg', '-version'], stdout=DEVNULL, stderr=DEVNULL)
+            return result.returncode == 0
+        except FileNotFoundError:
+            return False
 
 class MainWindow(QMainWindow):
     def __init__(self):
