@@ -31,6 +31,7 @@ class VideoInfoFetcher(QThread):
 DEFAULT_CONFIG = { 
     "ffmpeg_path": "ffmpeg", 
     "save_directory":  os.path.join(os.path.expanduser("~"), "Downloads"),
+    "filename_template": "%(title)s [%(id)s].%(ext)s",
     "supported_sites": [
         "https://youtube.com/",
         "https://youtu.be/",
@@ -102,10 +103,12 @@ class ConfigDialog(QDialog):
 
         self.ffmpeg_path_input = QLineEdit(self)
         self.save_directory_input = QLineEdit(self)
+        self.template_string_input = QLineEdit(self)
         self.supported_sites_input = QPlainTextEdit(self)
 
         layout.addRow("FFmpeg Path:", self.ffmpeg_path_input)
         layout.addRow("Save Directory:", self.save_directory_input)
+        layout.addRow("Filename Template:", self.template_string_input)
         layout.addRow("Supported Sites (one per line):", self.supported_sites_input)
 
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
@@ -122,16 +125,16 @@ class ConfigDialog(QDialog):
         else:
             self.config = DEFAULT_CONFIG
 
-        self.yt_dlp_path_input.setText(self.config.get("yt_dlp_path", DEFAULT_CONFIG["yt_dlp_path"]))
         self.ffmpeg_path_input.setText(self.config.get("ffmpeg_path", DEFAULT_CONFIG["ffmpeg_path"]))
         self.save_directory_input.setText(self.config.get("save_directory", DEFAULT_CONFIG["save_directory"]))
+        self.template_string_input.setText(self.config.get("filename_template", DEFAULT_CONFIG.get("filename_template", '%(title)s [%(id)s].%(ext)s')))
         self.supported_sites_input.setPlainText("\n".join(self.config.get("supported_sites", DEFAULT_CONFIG["supported_sites"])))
 
     def get_config(self):
         return {
-            "yt_dlp_path": self.yt_dlp_path_input.text(),
             "ffmpeg_path": self.ffmpeg_path_input.text(),
             "save_directory": self.save_directory_input.text(),
+            "filename_template": self.template_string_input.text(),
             "supported_sites": [line.strip() for line in self.supported_sites_input.toPlainText().splitlines() if line.strip()],
         }
 
@@ -139,7 +142,6 @@ class ConfigDialog(QDialog):
         config = self.get_config()
         
         # Normalize paths based on the operating system
-        config["yt_dlp_path"] = os.path.normpath(config["yt_dlp_path"])
         config["ffmpeg_path"] = os.path.normpath(config["ffmpeg_path"])
         config["save_directory"] = os.path.normpath(config["save_directory"])
 
@@ -160,18 +162,23 @@ class DownloadWorker(QThread):
     download_complete = pyqtSignal(str)
     download_error = pyqtSignal(str)
 
-    def __init__(self, video_url, download_type, ffmpeg_path, directory):
+    def __init__(self, video_url, download_type, ffmpeg_path, directory, filename_template, manual_filename):
         super().__init__()
         self.video_url = video_url
         self.download_type = download_type
         self.ffmpeg_path = ffmpeg_path
         self.directory = directory
+        self.filename_template = filename_template
+        self.manual_filename = manual_filename
 
     def run(self):
         try:
+            # Determine filename
+            filename = self.manual_filename if self.manual_filename else self.filename_template
+            outtmpl = os.path.join(self.directory, filename)
             # Prepare the options for yt-dlp
             ydl_opts = {
-                'outtmpl': os.path.join(self.directory, '%(title)s [%(id)s].%(ext)s'),
+                'outtmpl': outtmpl,
                 'format': 'bestaudio/best' if self.download_type == 'audio' else 'bestvideo+bestaudio/best',
                 'noplaylist': True,
                 'postprocessors': [{
@@ -210,10 +217,26 @@ class MainWindow(QMainWindow):
         self.load_config()
         self.initUI()
 
+    def load_config(self):
+        if os.path.exists(CONFIG_FILE_PATH):
+            with open(CONFIG_FILE_PATH, "r") as file:
+                self.config = json.load(file)
+        else:
+            self.config = DEFAULT_CONFIG
+
+        self.ffmpeg_path = self.config.get("ffmpeg_path", DEFAULT_CONFIG["ffmpeg_path"])
+        self.save_directory = self.config.get("save_directory", DEFAULT_CONFIG["save_directory"])
+        self.supported_sites = self.config.get("supported_sites", DEFAULT_CONFIG["supported_sites"])
+        self.filename_template = self.config.get("filename_template", DEFAULT_CONFIG.get("filename_template", '%(title)s [%(id)s].%(ext)s'))
+
     def initUI(self):
         self.url_label = QLabel('Enter video URL:', self)
         self.url_input = QLineEdit(self)
         self.url_input.setFixedWidth(371)
+
+        self.filename_label = QLabel('Enter filename (optional):', self)
+        self.filename_input = QLineEdit(self)
+        self.filename_input.setFixedWidth(371)
 
         self.info_button = QPushButton('Fetch Info', self)
         self.info_button.clicked.connect(self.fetch_info)
@@ -251,6 +274,8 @@ class MainWindow(QMainWindow):
         left_layout = QVBoxLayout()
         left_layout.addWidget(self.url_label)
         left_layout.addWidget(self.url_input)
+        left_layout.addWidget(self.filename_label)
+        left_layout.addWidget(self.filename_input)
 
         buttons_layout = QHBoxLayout()
         buttons_layout.addWidget(self.info_button)
@@ -294,18 +319,6 @@ class MainWindow(QMainWindow):
         exit_action = QAction("Exit", self)
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
-
-    def load_config(self):
-        if os.path.exists(CONFIG_FILE_PATH):
-            with open(CONFIG_FILE_PATH, "r") as file:
-                self.config = json.load(file)
-        else:
-            self.config = DEFAULT_CONFIG
-
-        self.yt_dlp_path = self.config.get("yt_dlp_path", DEFAULT_CONFIG["yt_dlp_path"])
-        self.ffmpeg_path = self.config.get("ffmpeg_path", DEFAULT_CONFIG["ffmpeg_path"])
-        self.save_directory = self.config.get("save_directory", DEFAULT_CONFIG["save_directory"])
-        self.supported_sites = self.config.get("supported_sites", DEFAULT_CONFIG["supported_sites"])
 
     def fetch_info(self):
         video_url = self.url_input.text()
@@ -366,6 +379,8 @@ class MainWindow(QMainWindow):
 
     def start_download(self, download_type):
         video_url = self.url_input.text()
+        manual_filename = self.filename_input.text()
+
         if not video_url:
             QMessageBox.warning(self, "Warning", "No URL provided")
             return
@@ -375,7 +390,6 @@ class MainWindow(QMainWindow):
             return
 
         directory = getattr(self, 'save_directory', get_save_directory())
-        yt_dlp_path = self.yt_dlp_path
         ffmpeg_path = self.ffmpeg_path
 
         self.info_button.setEnabled(False)
@@ -386,7 +400,8 @@ class MainWindow(QMainWindow):
         self.loading_message.show()
         self.loading_movie.start()
         
-        self.download_worker = DownloadWorker(video_url, download_type, yt_dlp_path, ffmpeg_path, directory)
+        # Pass manual filename to DownloadWorker
+        self.download_worker = DownloadWorker(video_url, download_type, ffmpeg_path, directory, self.filename_template, manual_filename)
         self.download_worker.download_complete.connect(self.on_download_complete)
         self.download_worker.download_error.connect(self.on_download_error)
         self.download_worker.start()
