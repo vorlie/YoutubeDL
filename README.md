@@ -39,11 +39,10 @@ The compiled executable for Windows is not included in the repository. Instead, 
 - **Loading Indicators:** Visual feedback with a loading animation during long operations.
 
 
-### Installation
-
+### Installation - Windows
+> Not providing steps for linux, because you should already know how to do it.
 1. **Download the archive**:
     - [YouTubeDL-win64.zip](https://github.com/vorlie/YoutubeDL/releases/download/v3.1/YouTubeDL-win64.zip)
-
 2. **Extract the archive**:
     - Extract the downloaded `YouTubeDL-win64.zip`.
     
