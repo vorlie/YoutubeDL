@@ -35,7 +35,7 @@ The compiled executable for Windows is not included in the repository. Instead, 
 - **Fetch Video Information:** Retrieve and display video details such as title, uploader, duration, and thumbnail.
 - **Download Video and Audio:** Download videos or audio from supported YouTube URLs.
    - It should be always targetting the highest quality.
-- **Custom Configuration:** Set paths for `yt-dlp` and `ffmpeg` binaries, and manage supported sites.
+- **Custom Configuration:** Set paths for `ffmpeg` binary, and manage supported sites.
 - **Loading Indicators:** Visual feedback with a loading animation during long operations.
 
 
