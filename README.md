@@ -26,7 +26,6 @@ The project directory contains:
 The compiled executable for Windows is not included in the repository. Instead, you can download it from the GitHub Releases page:
 
 - **[Download YoutubeDL - Windows](https://github.com/vorlie/YoutubeDL/releases/download/v3.1/YoutubeDL-win64.zip)**
-- **[Download YoutubeDL - Arch](https://github.com/vorlie/YoutubeDL/releases/download/v3.1/YoutubeDL-Linux-6.10.7-arch1-1-x86_64-with-glibc2.40.tar.gz)**
 
 ## YoutubeDL
 
@@ -40,7 +39,7 @@ The compiled executable for Windows is not included in the repository. Instead, 
 
 
 ### Installation - Windows
-> Not providing steps for linux, because you should already know how to do it.
+
 1. **Download the archive**:
     - [YouTubeDL-win64.zip](https://github.com/vorlie/YoutubeDL/releases/download/v3.1/YouTubeDL-win64.zip)
 2. **Extract the archive**:
