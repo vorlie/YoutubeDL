@@ -6,6 +6,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
+        ('module/utils.py', 'module/'),
         ('resources/loading.gif', '.'),
         ('icon.ico', '.'),
     ],
