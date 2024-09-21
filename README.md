@@ -70,7 +70,7 @@ To contribute to the development or modify the application:
     Ensure you have Python and pip installed. Then install the required Python packages:
 
     ```bash
-    pip install -r requirements.txt --ignore-requires-python
+    python -m pip install -r requirements.txt --ignore-requires-python
     ```
 
 4. **Run the Application**:
@@ -86,7 +86,7 @@ To contribute to the development or modify the application:
     If you do not have PyInstaller installed:
 
     ```bash
-    pip install pyinstaller==6.6.0
+    python -m pip install pyinstaller==6.6.0
     ```
 
     Build the executable:
